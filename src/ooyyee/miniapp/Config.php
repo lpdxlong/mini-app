@@ -13,7 +13,7 @@ class Config
 {
     private $appid;
     private $secret;
-
+    private $provider;
     private $token;
 
     /**
@@ -21,11 +21,12 @@ class Config
      * @param string $secret
      * @return Config
      */
-    public static function create($appid,$secret){
+    public static function create($appid,$secret,$provider){
 
         $self=new static();
         $self->setAppid($appid);
         $self->setSecret($secret);
+        $self->setProvider($provider);
         return $self;
 
     }
@@ -78,5 +79,23 @@ class Config
     {
         $this->token = $token;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getProvider()
+    {
+        return $this->provider;
+    }
+
+    /**
+     * @param mixed $provider
+     */
+    public function setProvider($provider)
+    {
+        $this->provider = $provider;
+    }
+
+
 
 }
