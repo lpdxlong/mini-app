@@ -17,9 +17,6 @@
         }
     },
     "require": {
-        "jiaweixs/weapp": "^1.4",
-        "wi1dcard/baidu-mini-program-sdk": "dev-master",
-        "1phper/tt-miniprogram": "dev-master",
         "topthink/framework": "v5.1.37.1",
         "lpdxlong/ooyyee-common-lang": "^1.1"
     }
