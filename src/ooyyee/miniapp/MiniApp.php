@@ -54,8 +54,9 @@ abstract class MiniApp
             throw new NotSupportException($miniAppClass);
         }
 
-       $className= Loader::parseName($miniAppClass,1);
-       return new $className($config);
+        $className= Loader::parseName($miniAppClass,1);
+        $className=__NAMESPACE__.'\\'.$className;
+        return new $className($config);
     }
 
     /**
@@ -73,16 +74,17 @@ abstract class MiniApp
      * @param $sessionKey
      * @return array
      */
-     public function decrypt($data,$iv,$sessionKey){
-       $className=basename(get_class($this));
+    public function decrypt($data,$iv,$sessionKey){
+        $className=basename(get_class($this));
 
-       $className.='Crypt';
-       $className='\\ooyyee\\miniapp\\crypt\\'.$className;
-       $crypt=new $className($this->appid,$sessionKey);
-       if($crypt instanceof Crypt){
-           return $crypt->decrypt($data,$iv);
-       }
-       return array('errcode'=>404);
+        $className.='Crypt';
+
+        $className=__NAMESPACE__.'\\crypt\\'.$className;
+        $crypt=new $className($this->appid,$sessionKey);
+        if($crypt instanceof Crypt){
+            return $crypt->decrypt($data,$iv);
+        }
+        return array('errcode'=>404);
     }
     abstract public function accessToken($refresh=false);
 
