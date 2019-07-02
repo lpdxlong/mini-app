@@ -45,16 +45,16 @@ abstract class MiniApp
 
     /**
      * @param Config $config
-     * @param string $miniAppClass weixin baidu alipay toutiao
+
      * @return MiniApp
      * @throws NotSupportException
      */
-    public static function createApp(Config $config,$miniAppClass='weixin'){
-        if(!in_array($miniAppClass,['weixin','baidu','alipay','toutiao'])){
-            throw new NotSupportException($miniAppClass);
+    public static function createApp(Config $config){
+        if(!in_array($config->getPlatform(),['weixin','baidu','alipay','toutiao'])){
+            throw new NotSupportException($config->getPlatform());
         }
 
-        $className= Loader::parseName($miniAppClass,1);
+        $className= Loader::parseName($config->getPlatform(),1);
         $className=__NAMESPACE__.'\\'.$className;
         return new $className($config);
     }
@@ -192,4 +192,12 @@ abstract class MiniApp
         return ['errcode'=>1,'errmsg'=>'url type is error'];
     }
 
+    /**
+     * @param array $params
+     * @param bool $refreshToken
+     * @return array
+     */
+    public function createQrcode(array $params,$refreshToken=false){
+        return array($params,$refreshToken);
+    }
 }

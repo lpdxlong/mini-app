@@ -10,6 +10,8 @@ namespace ooyyee\miniapp;
 
 
 use ooyyee\Http;
+use ooyyee\Image;
+use think\facade\App;
 
 class Weixin extends MiniApp
 {
@@ -56,5 +58,58 @@ class Weixin extends MiniApp
             return $result;
         }
         return cache($CACHE_KEY) ?: $this->accessToken(true);
+    }
+
+
+
+
+
+    public function sendMessage($data){
+        $url='https://api.weixin.qq.com/cgi-bin/message/custom/send';
+        return $this->postData($url,json_encode($data,JSON_UNESCAPED_UNICODE));
+    }
+
+    public function sendTemplateMessage($data){
+        $url='https://api.weixin.qq.com/cgi-bin/message/wxopen/template/send';
+        return $this->postData($url,json_encode($data,JSON_UNESCAPED_UNICODE));
+    }
+    public function getAnalysisDailyVisitTrend($beginTime,$endTime){
+        $json=[
+            'begin_date'=>date('Ymd',$beginTime),
+            'end_date'=>date('Ymd',$endTime)
+        ];
+        $url='https://api.weixin.qq.com/datacube/getweanalysisappiddailyvisittrend';
+        return $this->postData($url,json_encode($json,JSON_UNESCAPED_UNICODE));
+    }
+
+    /**
+     * @param array $params
+     * @param bool $refreshToken
+     * @return array|mixed
+     * @throws exception\AppExecption
+     * @throws exception\NoAccessTokenException
+     */
+    public function createQrcode(array $params,$refreshToken=false,$repeatCount=0){
+        $url='https://api.weixin.qq.com/wxa/getwxacode';
+        $savePath=App::getRootPath().'/public/uploads/qrcode/'.$this->getConfig()->getPlatform();
+        if(!is_dir($savePath) &&mkdir($savePath,0755,true)&& !is_dir($savePath)){
+            return ['errcode'=>1,'errmsg'=>'dir is not exists'];
+        }
+        $_params=json_encode($params,JSON_UNESCAPED_SLASHES);
+        $fileName=$savePath.md5($_params).'.png';
+        if(file_exists($fileName)){
+            return ['errcode'=>0,'url'=>Image::fileToURL($fileName),'file'=>$fileName];
+        }
+        $curl = $this->processAccessToken($url, $refreshToken);
+        $result = Http::post($curl, $_params,false);
+        $json=@json_decode($result,true);
+        if($json){
+            if ($repeatCount==0&&isset($json['errcode']) && ($json['errcode'] == '42001' || $json['errcode'] == '40001') ) {            $repeatCount++;
+                return $this->createQrcode($params,true,$repeatCount);
+            }
+            return $json;
+        }
+        file_put_contents($fileName, $result);
+        return ['errcode'=>0,'url'=>Image::fileToURL($fileName),'file'=>$fileName];
     }
 }

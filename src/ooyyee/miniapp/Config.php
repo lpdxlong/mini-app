@@ -13,23 +13,39 @@ class Config
 {
     private $appid;
     private $secret;
-    private $provider;
+    private $platform;
     private $token;
 
     /**
      * @param string $appid
      * @param string $secret
+     * @param string $platform
      * @return Config
      */
-    public static function create($appid,$secret,$provider){
+    public static function create($appid,$secret,$platform){
 
         $self=new static();
         $self->setAppid($appid);
         $self->setSecret($secret);
-        $self->setProvider($provider);
+        $self->setPlatform($platform);
         return $self;
-
     }
+
+    /**
+     * @param array $app
+     * @param string $platform
+     * @return Config
+     */
+    public static function createFromApp($app,$platform){
+        $self=new static();
+        $self->setAppid($app[$platform.'_appid']);
+        $self->setSecret($app[$platform.'_secret']);
+        $self->setPlatform($platform);
+        return $self;
+    }
+
+
+
 
     /**
      * @return mixed
@@ -83,18 +99,19 @@ class Config
     /**
      * @return mixed
      */
-    public function getProvider()
+    public function getPlatform()
     {
-        return $this->provider;
+        return $this->platform;
     }
 
     /**
-     * @param mixed $provider
+     * @param mixed $platform
      */
-    public function setProvider($provider)
+    public function setPlatform($platform)
     {
-        $this->provider = $provider;
+        $this->platform = $platform;
     }
+
 
 
 
