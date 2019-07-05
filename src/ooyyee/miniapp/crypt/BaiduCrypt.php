@@ -44,6 +44,6 @@ class BaiduCrypt extends Crypt
         // get app_key
         $app_key_decode = substr($plaintext, $unpack['len'] + 4);
 
-        return $this->appid == $app_key_decode ? ['errcode'=>0,'data'=>$content]: ['errcode'=>1];
+        return $this->appid == $app_key_decode ? ['errcode'=>0,'data'=>json_decode($content,true)]: ['errcode'=>1];
     }
 }

@@ -54,7 +54,7 @@ class WeixinCrypt extends Crypt
         if ($dataObj->watermark->appid != $this->appid) {
             return ['errcode'=>self::$IllegalBuffer];
         }
-        return ['errcode'=>self::$OK,'data'=>$result];
+        return ['errcode'=>self::$OK,'data'=>json_decode($result,true)];
     }
 
 

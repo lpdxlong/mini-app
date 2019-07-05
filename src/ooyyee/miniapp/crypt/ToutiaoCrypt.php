@@ -19,6 +19,6 @@ class ToutiaoCrypt extends Crypt
         $pad = ord(substr($plaintext, -1));
         $pad = $pad < 1 || $pad > 32 ? 0 : $pad;
         $plaintext = substr($plaintext, 0, strlen($plaintext) - $pad);
-        return ['errcode'=>0,'data'=>$plaintext];
+        return ['errcode'=>0,'data'=>json_decode($plaintext,true)];
     }
 }
