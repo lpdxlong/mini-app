@@ -75,10 +75,7 @@ abstract class MiniApp
      * @return array
      */
     public function decrypt($data,$iv,$sessionKey){
-        $className=basename(get_class($this));
-
-        $className.='Crypt';
-
+        $className=ucfirst($this->getConfig()->getPlatform().'Crypt');
         $className=__NAMESPACE__.'\\crypt\\'.$className;
         $crypt=new $className($this->appid,$sessionKey);
         if($crypt instanceof Crypt){
