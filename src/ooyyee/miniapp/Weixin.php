@@ -91,7 +91,7 @@ class Weixin extends MiniApp
      */
     public function createQrcode(array $params,$refreshToken=false,$repeatCount=0){
         $url='https://api.weixin.qq.com/wxa/getwxacode';
-        $savePath=App::getRootPath().'/public/uploads/qrcode/'.$this->getConfig()->getPlatform();
+        $savePath=App::getRootPath().'/public/uploads/qrcode/'.$this->getConfig()->getPlatform().'/'.$this->appid.'/';
         if(!is_dir($savePath) &&mkdir($savePath,0755,true)&& !is_dir($savePath)){
             return ['errcode'=>1,'errmsg'=>'dir is not exists'];
         }
