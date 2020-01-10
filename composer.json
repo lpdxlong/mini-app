@@ -17,7 +17,6 @@
         }
     },
     "require": {
-        "topthink/framework": "v5.1.37.1",
         "lpdxlong/ooyyee-common-lang": "^1.1"
     }
 }
